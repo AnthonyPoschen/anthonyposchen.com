@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Independent software developer building mobile apps, web apps, games, game-server tools, and hosting-related software products.">
+	<title>Independent Software Developer</title>
+
+	<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+	<link rel="stylesheet" href="/styles.css">
+	<script src="/business-details.js"></script>
+	<script src="/framework/utils.js"></script>
+	<script src="/framework/loader.js"></script>
+	<script src="/framework/router.js"></script>
+
+	<script>
+		window.Router.register('/', 'page-home');
+		window.Router.register('/privacy', 'page-privacy');
+		window.Router.register('/terms', 'page-terms');
+		window.Router.register('/refund-policy', 'page-refund');
+	</script>
+</head>
+
+<body>
+	<header class="site-header">
+		<a class="brand" href="/" aria-label="Home">
+			<span class="brand-mark">AP</span>
+			<span>
+				<strong data-business="publicName"></strong>
+				<small>Software products from Australia</small>
+			</span>
+		</a>
+		<nav class="site-nav" aria-label="Primary navigation">
+			<a href="/privacy">Privacy</a>
+			<a href="/terms">Terms</a>
+			<a href="/refund-policy">Refunds</a>
+		</nav>
+	</header>
+
+	<main>
+		<route-view not-found="page-home"></route-view>
+	</main>
+
+	<footer class="site-footer">
+		<div>
+			<strong data-business="publicName"></strong>
+			<span>Business name: <span data-business="legalName"></span></span>
+			<span>ABN: <span data-business="abn"></span></span>
+			<span data-business="country"></span>
+			<span>Contact: <a data-business-href="email" data-business="email" href="#"></a></span>
+		</div>
+		<nav aria-label="Footer navigation">
+			<a href="/">Home</a>
+			<a href="/privacy">Privacy Policy</a>
+			<a href="/terms">Terms of Service</a>
+			<a href="/refund-policy">Refund Policy</a>
+			<a data-business-href="githubUrl" href="#" rel="me noopener" target="_blank">GitHub</a>
+			<a data-business-href="xUrl" href="#" rel="me noopener" target="_blank">X</a>
+		</nav>
+		<p>© <span data-business="copyrightYear"></span> <span data-business="publicName"></span>. Founder-led software business operated as a sole trader.</p>
+	</footer>
+</body>
+
+</html>

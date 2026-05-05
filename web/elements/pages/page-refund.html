@@ -1,0 +1,59 @@
+<template id="page-refund">
+	<div class="page-shell policy-page">
+		<header class="policy-header">
+			<p class="eyebrow">Refund Policy</p>
+			<h1>Refund Policy</h1>
+			<p class="lede">Refunds are handled case by case, with a focus on whether the product or service works as described.</p>
+			<p class="policy-meta">For refund requests, email <a data-business-href="email" data-business="email" href="#"></a>.</p>
+		</header>
+
+		<section class="section policy-layout">
+			<article class="policy-section">
+				<h2>General refund approach</h2>
+				<p>If a product or service does not work as described, contact <a data-business-href="email" data-business="email" href="#"></a> within a reasonable period with your order details and a description of the issue.</p>
+			</article>
+			<article class="policy-section">
+				<h2>Digital products</h2>
+				<p>Refunds for digital products are considered case by case. If the product cannot be accessed, has a major defect, or materially differs from its description, a refund, fix, or alternative resolution may be offered.</p>
+			</article>
+			<article class="policy-section">
+				<h2>Subscriptions</h2>
+				<p>Subscriptions can be cancelled before the next billing period. Unless required by law, previous billing periods are generally not refunded after service has been provided.</p>
+			</article>
+			<article class="policy-section">
+				<h2>Services and hosting-related products</h2>
+				<p>For services, game-server tools, and hosting-related products, refund eligibility may depend on setup work completed, service usage, and whether the service was delivered as described.</p>
+			</article>
+			<article class="policy-section">
+				<h2>How to request a refund</h2>
+				<ul>
+					<li>Email <a data-business-href="email" data-business="email" href="#"></a>.</li>
+					<li>Include the product or service name.</li>
+					<li>Include order, invoice, or account details if available.</li>
+					<li>Briefly explain the problem and the outcome you are requesting.</li>
+				</ul>
+			</article>
+			<article class="policy-section">
+				<h2>Australian consumer law</h2>
+				<p>Nothing in this policy limits rights you may have under Australian consumer law or other laws that cannot be excluded.</p>
+			</article>
+		</section>
+	</div>
+</template>
+
+<script>
+	const pageRefundTemplate = document.getElementById('page-refund');
+
+	customElements.define('page-refund', class extends HTMLElement {
+		constructor() {
+			super();
+		}
+
+		connectedCallback() {
+			if (!this.hasChildNodes()) {
+				this.appendChild(pageRefundTemplate.content.cloneNode(true));
+			}
+			window.Business?.apply(this);
+		}
+	});
+</script>

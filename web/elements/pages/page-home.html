@@ -1,0 +1,98 @@
+<template id="page-home">
+	<div class="page-shell">
+		<section class="intro">
+			<div>
+				<p class="eyebrow">Independent software developer</p>
+				<h1 data-business="publicName"></h1>
+				<p class="lede">
+					I build software products including mobile apps, web applications, games, game-server tools,
+					and hosting-related services.
+				</p>
+			</div>
+
+			<aside class="identity-card" aria-label="Business identity">
+				<dl>
+					<div>
+						<dt>Public name</dt>
+						<dd data-business="publicName"></dd>
+					</div>
+					<div>
+						<dt>Legal business name</dt>
+						<dd data-business="legalName"></dd>
+					</div>
+					<div>
+						<dt>Business type</dt>
+						<dd data-business="businessType"></dd>
+					</div>
+					<div>
+						<dt>ABN</dt>
+						<dd data-business="abn"></dd>
+					</div>
+					<div>
+						<dt>Location</dt>
+						<dd data-business="country"></dd>
+					</div>
+				</dl>
+			</aside>
+		</section>
+
+		<section class="section website-index">
+			<div class="section-head">
+				<h2>Projects</h2>
+				<p>Websites, products, tools, and free game mods. This list can grow without needing a new layout.</p>
+			</div>
+			<ul class="link-list">
+				<li>
+					<a href="https://plexus.zone" target="_blank" rel="noopener">Plexus.zone</a>
+					<span>Game server hosting.</span>
+				</li>
+				<li>
+					<a href="https://mods.factorio.com/user/zanven" target="_blank" rel="noopener">Factorio mods</a>
+					<span>Free game mods published on the Factorio mod portal as zanven.</span>
+				</li>
+				<li>
+					<a data-business-href="email" href="#">Next project</a>
+					<span>Placeholder for the next website, product, tool, or free mod.</span>
+				</li>
+			</ul>
+		</section>
+
+		<section class="section contact-summary">
+			<div class="section-head">
+				<h2>Contact</h2>
+				<p>For product support, business enquiries, or general questions.</p>
+			</div>
+			<dl class="detail-list">
+				<div>
+					<dt>Email</dt>
+					<dd><a data-business-href="email" data-business="email" href="#"></a></dd>
+				</div>
+				<div>
+					<dt>Location</dt>
+					<dd data-business="location"></dd>
+				</div>
+				<div>
+					<dt>Support note</dt>
+					<dd>Include the product name, order details if available, and a short description of the issue.</dd>
+				</div>
+			</dl>
+		</section>
+	</div>
+</template>
+
+<script>
+	const pageHomeTemplate = document.getElementById('page-home');
+
+	customElements.define('page-home', class extends HTMLElement {
+		constructor() {
+			super();
+		}
+
+		connectedCallback() {
+			if (!this.hasChildNodes()) {
+				this.appendChild(pageHomeTemplate.content.cloneNode(true));
+			}
+			window.Business?.apply(this);
+		}
+	});
+</script>

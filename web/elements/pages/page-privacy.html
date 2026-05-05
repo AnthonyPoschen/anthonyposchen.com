@@ -1,0 +1,56 @@
+<template id="page-privacy">
+	<div class="page-shell policy-page">
+		<header class="policy-header">
+			<p class="eyebrow">Privacy Policy</p>
+			<h1>Privacy Policy</h1>
+			<p class="lede">This policy explains how personal information may be collected and used by <span data-business="publicName"></span>.</p>
+			<p class="policy-meta">Last updated 5 May 2026. Contact: <a data-business-href="email" data-business="email" href="#"></a>.</p>
+		</header>
+
+		<section class="section policy-layout">
+			<article class="policy-section">
+				<h2>Who operates this website</h2>
+				<p>This website is operated by <span data-business="legalName"></span>, an Australian independent software developer operating as an individual / sole trader. ABN: <span data-business="abn"></span>.</p>
+			</article>
+			<article class="policy-section">
+				<h2>Information collected</h2>
+				<p>This website does not currently collect account information or payment details directly. If you contact me by email, I may receive your name, email address, message content, and any details you choose to provide.</p>
+				<p>Future products may collect information needed to provide the product, process support requests, operate accounts, deliver hosted services, or meet legal obligations.</p>
+			</article>
+			<article class="policy-section">
+				<h2>Payments and third parties</h2>
+				<p>Payments, subscriptions, and billing may be processed by third-party providers such as Stripe. Payment processors may collect and handle payment information according to their own privacy and security policies.</p>
+			</article>
+			<article class="policy-section">
+				<h2>How information is used</h2>
+				<ul>
+					<li>To respond to support requests, business enquiries, and general questions.</li>
+					<li>To operate, maintain, and improve software products and services.</li>
+					<li>To process purchases, subscriptions, refunds, and account-related requests where relevant.</li>
+					<li>To comply with legal, tax, fraud prevention, and platform requirements.</li>
+				</ul>
+			</article>
+			<article class="policy-section">
+				<h2>Contact</h2>
+				<p>For privacy questions or requests, email <a data-business-href="email" data-business="email" href="#"></a>.</p>
+			</article>
+		</section>
+	</div>
+</template>
+
+<script>
+	const pagePrivacyTemplate = document.getElementById('page-privacy');
+
+	customElements.define('page-privacy', class extends HTMLElement {
+		constructor() {
+			super();
+		}
+
+		connectedCallback() {
+			if (!this.hasChildNodes()) {
+				this.appendChild(pagePrivacyTemplate.content.cloneNode(true));
+			}
+			window.Business?.apply(this);
+		}
+	});
+</script>
