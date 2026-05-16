@@ -155,7 +155,7 @@ The site is a single-page app with routed page components. These routes should c
 
 Required route purposes:
 
-- `/`: Introduce Anthony, explain what he builds, show business identity, list websites/products/tools/repos/free game mods, and include contact/support details.
+- `/`: Introduce Anthony, explain what he builds, show business identity, highlight GitHub and X, list websites/products/tools/repos/free game mods, and include contact/support details.
 - `/privacy`: Explain simple personal information handling, email contact, future product data, payment processors such as Stripe, and contact method.
 - `/terms`: Set basic terms for using the website and future software products/services.
 - `/refund-policy`: Explain refund/cancellation handling for digital products, subscriptions, services, and hosting-related products.
@@ -180,8 +180,6 @@ Footer navigation should include:
 - Privacy Policy
 - Terms of Service
 - Refund Policy
-- GitHub
-- X
 
 Use `web/business-details.js` for all reusable identity values.
 
@@ -293,6 +291,11 @@ makefile
 Dockerfile
 .dockerignore
 .github/workflows/docker.yml
+kustomization/base/kustomization.yaml
+kustomization/base/deployment.yaml
+kustomization/base/image-automation.yaml
+kustomization/base/service.yaml
+kustomization/overlays/prod/kustomization.yaml
 web/index.html
 web/styles.css
 web/business-details.js
@@ -391,6 +394,8 @@ ghcr.io/anthonyposchen/anthonyposchen.com
 
 The workflow runs on pushes to `master`, pushes to `main`, version tags matching `v*`, and manual `workflow_dispatch`.
 
+The Docker workflow ignores commits that only change `kustomization/**`. This prevents Flux image automation commits from triggering another Docker build and creating an image-update loop.
+
 The app depends on the local `basic-web` framework via:
 
 ```text
@@ -416,6 +421,46 @@ If `basic-web` is private, create a repository secret named `BASIC_WEB_READ_TOKE
 
 Do not remove the named build context unless `go.mod` no longer uses the local `replace ../basic-web` dependency.
 
+## Kubernetes And FluxCD
+
+FluxCD should use the production Kustomize entrypoint:
+
+```text
+kustomization/overlays/prod
+```
+
+The production overlay should include:
+
+```text
+kustomization/base
+```
+
+The base Kubernetes manifests define:
+
+- A `Deployment` named `anthonyposchen-com`
+- A `Service` named `anthonyposchen-com`
+- The container image `ghcr.io/anthonyposchen/anthonyposchen.com:latest`
+- Container port `42069`
+- A ClusterIP service exposing port `80` and targeting the deployment's named `http` port
+- Flux image automation resources for `ghcr.io/anthonyposchen/anthonyposchen.com`
+
+The Kubernetes setup intentionally does not define ingress, TLS, hostnames, or path routing yet. Assume external/upstream infrastructure handles URL routing and sends traffic to the service.
+
+The cluster is expected to have Flux image automation CRDs and controllers installed:
+
+```text
+image-reflector-controller
+image-automation-controller
+```
+
+The image automation resources live in the `flux-system` namespace and assume the bootstrapped Git source is named `flux-system`, tracking the `master` branch. `ImagePolicy` filters the mutable `latest` tag and uses `digestReflectionPolicy: Always`, so Flux can detect digest changes when GitHub Container Registry publishes a new `latest` image. The deployment image line must keep its inline Flux setter comment:
+
+```yaml
+image: ghcr.io/anthonyposchen/anthonyposchen.com:latest # {"$imagepolicy": "flux-system:anthonyposchen-com"}
+```
+
+Flux updates files under `./kustomization/base` and commits the changed image reference back to `master`. The image automation commit message includes `[skip ci]`, and the Docker workflow also ignores `kustomization/**`, to prevent digest update commits from triggering another container build.
+
 ## Design Direction
 
 The design should remain distinct from Plexus. Do not copy Plexus styling.
@@ -426,7 +471,7 @@ Current visual direction:
 - Charcoal terminal-like background with restrained grid/glow texture
 - Green command-line accents with small amber highlights
 - Monospace/code-inspired typography
-- Keep the homepage utilitarian: short intro, business identity, and a simple hyperlink list of websites/products with one-line descriptions
+- Keep the homepage utilitarian: short intro, highlighted social links, business identity, and a simple hyperlink list of websites/products with one-line descriptions
 - Avoid marketing fluff, feature grids, and multiple placeholder cards
 - Policy pages should look like polished dark README/legal documents while remaining normal selectable text, not collections of cards
 - Clear business identity panel

@@ -212,6 +212,59 @@ h3 {
 	max-width: 690px;
 }
 
+.social-highlights {
+	display: grid;
+	gap: 12px;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	margin-top: 26px;
+	max-width: 690px;
+}
+
+.social-link {
+	background:
+		linear-gradient(135deg, rgba(126, 231, 135, 0.12), rgba(242, 204, 96, 0.08)),
+		rgba(17, 25, 35, 0.8);
+	border: 1px solid rgba(126, 231, 135, 0.22);
+	border-radius: 12px;
+	box-shadow: 0 14px 36px rgba(0, 0, 0, 0.2);
+	color: var(--text);
+	display: grid;
+	gap: 4px;
+	min-height: 104px;
+	padding: 16px;
+	text-decoration: none;
+}
+
+.social-link:hover {
+	background:
+		linear-gradient(135deg, rgba(126, 231, 135, 0.18), rgba(242, 204, 96, 0.12)),
+		rgba(21, 31, 43, 0.9);
+	border-color: rgba(126, 231, 135, 0.44);
+	color: var(--text);
+	transform: translateY(-1px);
+}
+
+.social-label {
+	align-items: center;
+	color: var(--accent);
+	display: inline-flex;
+	font-size: 1rem;
+	font-weight: 900;
+	gap: 8px;
+}
+
+.social-symbol {
+	fill: currentColor;
+	height: 22px;
+	width: 22px;
+}
+
+.social-copy {
+	color: var(--muted);
+	font-size: 0.88rem;
+	line-height: 1.45;
+}
+
 .action-row {
 	margin-top: 28px;
 }
@@ -539,7 +592,8 @@ h3 {
 	}
 
 	.link-list li,
-	.detail-list div {
+	.detail-list div,
+	.social-highlights {
 		grid-template-columns: 1fr;
 	}
 }
