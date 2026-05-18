@@ -2,7 +2,7 @@ module github.com/AnthonyPoschen/anthonyposchen.com
 
 go 1.25.5
 
-require github.com/AnthonyPoschen/basic-web v0.0.0
+require github.com/AnthonyPoschen/basic-web v0.0.5
 
 require (
 	github.com/CAFxX/httpcompression v0.0.9 // indirect

@@ -352,8 +352,11 @@ The Air setup intentionally follows the macOS-safe pattern used by the Plexus we
 The current Air build command is:
 
 ```sh
-mkdir -p ./tmp/go-build && env GOCACHE=$(CURDIR)/tmp/go-build go build -o ./tmp/anthonyposchen-com .
+mkdir -p ./tmp/go-build ./tmp/go-mod && env GOCACHE=$(CURDIR)/tmp/go-build GOMODCACHE=$(CURDIR)/tmp/go-mod go build -o ./tmp/anthonyposchen-com .
 ```
+
+Air should run the compiled binary with `DEV=1` via `--build.full_bin`, not
+`--build.bin`, because current Air versions treat `build.bin` as a binary path.
 
 The local server defaults to:
 

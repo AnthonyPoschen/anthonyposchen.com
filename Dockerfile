@@ -26,6 +26,6 @@ COPY --from=build /out/anthonyposchen-com /anthonyposchen-com
 ENV PORT=42069
 EXPOSE 42069
 
-USER 65532:65532
+USER 1000:1000
 
 ENTRYPOINT ["/anthonyposchen-com"]
