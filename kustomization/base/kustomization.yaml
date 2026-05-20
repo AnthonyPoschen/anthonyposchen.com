@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - deployment.yaml
+  - httproute.yaml
   - image-automation.yaml
   - service.yaml
 
