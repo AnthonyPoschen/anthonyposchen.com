@@ -460,7 +460,7 @@ The base Kubernetes manifests define:
 - The container image `ghcr.io/anthonyposchen/anthonyposchen.com`
 - Container port `42069`
 - A ClusterIP service exposing port `80` and targeting the deployment's named `http` port
-- Routing for `anthonyposchen.com` through the `Gateway` named `ingress` in the `kube-system` namespace
+- Routing for `anthonyposchen.com` and `www.anthonyposchen.com` through the `Gateway` named `ingress` in the `kube-system` namespace
 - Flux image automation resources for `ghcr.io/anthonyposchen/anthonyposchen.com`
 
 The Kubernetes setup intentionally does not define the Gateway itself, TLS certificates, or external load balancer details. Assume external/upstream infrastructure provides the `kube-system/ingress` Gateway and sends matching traffic to the service through the `HTTPRoute`.

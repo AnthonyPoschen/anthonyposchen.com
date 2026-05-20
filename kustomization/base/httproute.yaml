@@ -8,6 +8,7 @@ spec:
       namespace: kube-system
   hostnames:
     - anthonyposchen.com
+    - www.anthonyposchen.com
   rules:
     - backendRefs:
         - name: anthonyposchen-com
