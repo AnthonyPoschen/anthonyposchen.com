@@ -458,10 +458,10 @@ image-reflector-controller
 image-automation-controller
 ```
 
-The image automation resources live in the `flux-system` namespace and assume the bootstrapped Git source is named `flux-system`, tracking the `master` branch. `ImagePolicy` filters the mutable `latest` tag and uses `digestReflectionPolicy: Always`, so Flux can detect digest changes when GitHub Container Registry publishes a new `latest` image. The deployment image line must keep its inline Flux setter comment:
+The app Flux `Kustomization` applies this repo with `targetNamespace: app-anthonyposchen-com`, so the image automation resources are expected to live in the `app-anthonyposchen-com` namespace even though the source `GitRepository` lives in `flux-system`. `ImageUpdateAutomation` should reference `sourceRef.name: app-anthonyposchen-com` and `sourceRef.namespace: flux-system`. `ImagePolicy` filters the mutable `latest` tag and uses `digestReflectionPolicy: Always`, so Flux can detect digest changes when GitHub Container Registry publishes a new `latest` image. The deployment image line must keep its inline Flux setter comment:
 
 ```yaml
-image: ghcr.io/anthonyposchen/anthonyposchen.com:latest # {"$imagepolicy": "flux-system:anthonyposchen-com"}
+image: ghcr.io/anthonyposchen/anthonyposchen.com:latest # {"$imagepolicy": "app-anthonyposchen-com:anthonyposchen-com"}
 ```
 
 Flux updates files under `./kustomization/base` and commits the changed image reference back to `master`. The image automation commit message includes `[skip ci]`, and the Docker workflow also ignores `kustomization/**`, to prevent digest update commits from triggering another container build.

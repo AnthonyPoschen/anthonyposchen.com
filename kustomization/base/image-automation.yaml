@@ -32,7 +32,8 @@ spec:
   interval: 1m
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: app-anthonyposchen-com
+    namespace: flux-system
   git:
     checkout:
       ref:

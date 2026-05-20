@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: website
-          image: ghcr.io/anthonyposchen/anthonyposchen.com:latest # {"$imagepolicy": "flux-system:anthonyposchen-com"}
+          image: ghcr.io/anthonyposchen/anthonyposchen.com:latest # {"$imagepolicy": "app-anthonyposchen-com:anthonyposchen-com"}
           imagePullPolicy: Always
           env:
             - name: PORT
