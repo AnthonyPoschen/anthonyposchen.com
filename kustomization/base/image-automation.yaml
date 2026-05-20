@@ -16,12 +16,12 @@ spec:
   imageRepositoryRef:
     name: anthonyposchen-com
   filterTags:
-    pattern: "^latest$"
+    pattern: "^master-[a-fA-F0-9]+-(?P<ts>[1-9][0-9]*)$"
+    extract: "$ts"
   policy:
-    alphabetical:
+    numerical:
       order: asc
-  digestReflectionPolicy: Always
-  interval: 1m
+  digestReflectionPolicy: IfNotPresent
 ---
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageUpdateAutomation

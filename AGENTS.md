@@ -399,6 +399,20 @@ The workflow runs on pushes to `master`, pushes to `main`, version tags matching
 
 The Docker workflow ignores commits that only change `kustomization/**`. This prevents Flux image automation commits from triggering another Docker build and creating an image-update loop.
 
+For branch builds, the workflow publishes a commit-traceable image tag in this form:
+
+```text
+<branch>-<short-git-sha>-<unix-timestamp>
+```
+
+For example:
+
+```text
+master-5838cfa-1779289200
+```
+
+Flux image automation uses this timestamp suffix to select the newest branch build while keeping the selected image tag tied to the Git commit that produced it. Do not replace this with a plain Git SHA policy: SHA tags are identifiers, not orderable versions, so Flux cannot reliably select the newest commit from `sha-*` tags alone.
+
 The app depends on the local `basic-web` framework via:
 
 ```text
@@ -443,7 +457,7 @@ The base Kubernetes manifests define:
 - A `Deployment` named `anthonyposchen-com`
 - A `Service` named `anthonyposchen-com`
 - A Gateway API `HTTPRoute` named `anthonyposchen-com`
-- The container image `ghcr.io/anthonyposchen/anthonyposchen.com:latest`
+- The container image `ghcr.io/anthonyposchen/anthonyposchen.com`
 - Container port `42069`
 - A ClusterIP service exposing port `80` and targeting the deployment's named `http` port
 - Routing for `anthonyposchen.com` through the `Gateway` named `ingress` in the `kube-system` namespace
@@ -458,10 +472,10 @@ image-reflector-controller
 image-automation-controller
 ```
 
-The app Flux `Kustomization` applies this repo with `targetNamespace: app-anthonyposchen-com`, so the image automation resources are expected to live in the `app-anthonyposchen-com` namespace even though the source `GitRepository` lives in `flux-system`. `ImageUpdateAutomation` should reference `sourceRef.name: app-anthonyposchen-com` and `sourceRef.namespace: flux-system`. `ImagePolicy` filters the mutable `latest` tag and uses `digestReflectionPolicy: Always`, so Flux can detect digest changes when GitHub Container Registry publishes a new `latest` image. The deployment image line must keep its inline Flux setter comment:
+The app Flux `Kustomization` applies this repo with `targetNamespace: app-anthonyposchen-com`, so the image automation resources are expected to live in the `app-anthonyposchen-com` namespace even though the source `GitRepository` lives in `flux-system`. `ImageUpdateAutomation` should reference `sourceRef.name: app-anthonyposchen-com` and `sourceRef.namespace: flux-system`. `ImagePolicy` filters `master-<short-git-sha>-<unix-timestamp>` tags, extracts the timestamp, and uses a numerical ascending policy to select the newest image. The deployment image line must keep its inline Flux setter comment:
 
 ```yaml
-image: ghcr.io/anthonyposchen/anthonyposchen.com:latest # {"$imagepolicy": "app-anthonyposchen-com:anthonyposchen-com"}
+image: ghcr.io/anthonyposchen/anthonyposchen.com:master-5838cfa-1779289200 # {"$imagepolicy": "app-anthonyposchen-com:anthonyposchen-com"}
 ```
 
 Flux updates files under `./kustomization/base` and commits the changed image reference back to `master`. The image automation commit message includes `[skip ci]`, and the Docker workflow also ignores `kustomization/**`, to prevent digest update commits from triggering another container build.
