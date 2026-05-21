@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: website
-          image: ghcr.io/anthonyposchen/anthonyposchen.com:master-74389de-1779335011@sha256:e50927db03ac8c38ab74a9becdc1291bb029742f5fb2e68676ba170e44d074ac # {"$imagepolicy": "app-anthonyposchen-com:anthonyposchen-com"}
+          image: ghcr.io/anthonyposchen/anthonyposchen.com:master-3e447d3-1779335633@sha256:269d776bbd13e76a78428b6c6b61a19f546e40f5c1601904ab921624754764c5 # {"$imagepolicy": "app-anthonyposchen-com:anthonyposchen-com"}
           imagePullPolicy: Always
           env:
             - name: PORT
