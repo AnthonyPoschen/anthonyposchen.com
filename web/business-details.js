@@ -29,9 +29,18 @@ window.Business = {
 			document.querySelector('meta[name="description"]')?.setAttribute("content", this.get("siteDescription"));
 		}
 
+		if (root instanceof Element && root.matches("[data-business]")) {
+			root.textContent = this.get(root.dataset.business);
+		}
+
 		root.querySelectorAll("[data-business]").forEach((element) => {
 			element.textContent = this.get(element.dataset.business);
 		});
+
+		if (root instanceof Element && root.matches("[data-business-href]")) {
+			const href = this.href(root.dataset.businessHref);
+			if (href) root.setAttribute("href", href);
+		}
 
 		root.querySelectorAll("[data-business-href]").forEach((element) => {
 			const href = this.href(element.dataset.businessHref);
@@ -40,4 +49,23 @@ window.Business = {
 	},
 };
 
-document.addEventListener("DOMContentLoaded", () => window.Business.apply());
+window.Business.apply();
+
+if (document.readyState === "loading") {
+	const businessObserver = new MutationObserver((mutations) => {
+		mutations.forEach((mutation) => {
+			mutation.addedNodes.forEach((node) => {
+				if (node instanceof Element) window.Business.apply(node);
+			});
+		});
+	});
+
+	businessObserver.observe(document.documentElement, { childList: true, subtree: true });
+
+	document.addEventListener("DOMContentLoaded", () => {
+		businessObserver.disconnect();
+		window.Business.apply();
+	}, { once: true });
+} else {
+	window.Business.apply();
+}
