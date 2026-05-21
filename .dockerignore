@@ -2,7 +2,6 @@
 .github
 docs/context.md
 tmp
-vendor
 basic-web
 build-errors.log
 .DS_Store

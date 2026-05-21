@@ -6,10 +6,6 @@ FROM golang:${GO_VERSION}-alpine AS build
 
 WORKDIR /src
 
-# The app's go.mod uses a local ../basic-web replacement.
-# Provide that sibling path through a Docker named build context:
-# docker build --build-context basic-web=../basic-web .
-COPY --from=basic-web . /src/basic-web
 COPY . /src/anthonyposchen.com
 
 WORKDIR /src/anthonyposchen.com
@@ -17,7 +13,7 @@ WORKDIR /src/anthonyposchen.com
 ENV CGO_ENABLED=0
 ENV GOOS=linux
 
-RUN go build -trimpath -ldflags="-s -w" -o /out/anthonyposchen-com .
+RUN go build -mod=vendor -trimpath -ldflags="-s -w" -o /out/anthonyposchen-com .
 
 FROM scratch
 

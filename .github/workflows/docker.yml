@@ -28,13 +28,6 @@ jobs:
       - name: Checkout website
         uses: actions/checkout@v6
 
-      - name: Checkout basic-web
-        uses: actions/checkout@v6
-        with:
-          repository: AnthonyPoschen/basic-web
-          path: basic-web
-          token: ${{ secrets.BASIC_WEB_READ_TOKEN || github.token }}
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
@@ -71,8 +64,6 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          build-contexts: |
-            basic-web=./basic-web
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha

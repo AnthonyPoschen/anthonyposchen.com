@@ -263,10 +263,10 @@ Avoid aggressive "no refunds ever" language. Case-by-case and consumer-law-aware
 
 This project uses Anthony's `basic-web` framework.
 
-The Go module depends on the local framework via:
+The Go module depends on the remote framework module:
 
 ```text
-replace github.com/AnthonyPoschen/basic-web => ../basic-web
+github.com/AnthonyPoschen/basic-web
 ```
 
 The framework shape is:
@@ -275,7 +275,7 @@ The framework shape is:
 - In development, `main.go` serves `./web` directly.
 - In production, embedded files are minified via `basic-web/pkg/memfs`.
 - `util.SetupHttpMux` serves static files and falls back to `index.html` for SPA routes.
-- Browser framework scripts are loaded from `/framework/utils.js`, `/framework/loader.js`, and `/framework/router.js`.
+- Browser framework code is loaded from `/framework/basic-web.js`.
 - Custom elements are lazy-loaded from `web/elements/**/*.html`.
 - Route components are registered in `web/index.html`.
 - `<route-view>` renders the matched page element.
@@ -413,30 +413,23 @@ master-5838cfa-1779289200
 
 Flux image automation uses this timestamp suffix to select the newest branch build while keeping the selected image tag tied to the Git commit that produced it. Do not replace this with a plain Git SHA policy: SHA tags are identifiers, not orderable versions, so Flux cannot reliably select the newest commit from `sha-*` tags alone.
 
-The app depends on the local `basic-web` framework via:
+The app depends on the remote `basic-web` framework module:
 
 ```text
-replace github.com/AnthonyPoschen/basic-web => ../basic-web
+github.com/AnthonyPoschen/basic-web
 ```
 
-Because of that replacement, Docker builds require a named build context called `basic-web`.
+Dependencies are vendored in `vendor/`, including `basic-web`, so Docker and CI builds can use the checked-in dependency tree without a sibling framework checkout. The Dockerfile builds with `-mod=vendor`.
+
+Docker builds do not require a sibling `basic-web` checkout or named build context.
 
 Local build example:
 
 ```sh
-docker build --build-context basic-web=../basic-web -t anthonyposchen-com .
+docker build -t anthonyposchen-com .
 ```
 
-GitHub Actions checks out `AnthonyPoschen/basic-web` into `./basic-web` and passes it to `docker/build-push-action` as:
-
-```text
-build-contexts:
-  basic-web=./basic-web
-```
-
-If `basic-web` is private, create a repository secret named `BASIC_WEB_READ_TOKEN` with read access to that repository. If it is public, the default GitHub token should be enough.
-
-Do not remove the named build context unless `go.mod` no longer uses the local `replace ../basic-web` dependency.
+Do not reintroduce the named build context unless `go.mod` starts using a local `replace ../basic-web` dependency again.
 
 ## Kubernetes And FluxCD
 
