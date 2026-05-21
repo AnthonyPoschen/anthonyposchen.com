@@ -76,6 +76,11 @@ main,
 	max-width: 1080px;
 }
 
+main {
+	min-height: 100vh;
+	min-height: 100svh;
+}
+
 .site-header {
 	align-items: center;
 	backdrop-filter: blur(18px);
