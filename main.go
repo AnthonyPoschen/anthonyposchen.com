@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/AnthonyPoschen/anthonyposchen.com/config"
 	"github.com/AnthonyPoschen/basic-web/pkg/memfs"
 	"github.com/AnthonyPoschen/basic-web/pkg/util"
 )
@@ -19,7 +20,10 @@ func init() {
 	if util.IsDev() {
 		webFS = os.DirFS("./web")
 	} else {
-		tmpfs, _ := fs.Sub(embeddedFS, "web")
+		tmpfs, err := fs.Sub(embeddedFS, "web")
+		if err != nil {
+			panic(err)
+		}
 		webFS = memfs.CreateMinifiedFS(tmpfs)
 	}
 
@@ -28,10 +32,7 @@ func init() {
 }
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "42069"
-	}
+	port := config.Port()
 
 	slog.Info("Server listening", "port", port)
 	if err := http.ListenAndServe(":"+port, http.DefaultServeMux); err != nil {

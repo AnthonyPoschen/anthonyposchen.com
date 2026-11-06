@@ -92,6 +92,8 @@ Example:
 
 Only `web/business-details.js` should need to change when contact/legal/social identity details change. If a page absolutely needs fallback text for accessibility or no-JS behavior, make sure it still cannot drift from the source of truth.
 
+Colour values live in `web/tokens.css` as `--palette-*` custom properties. `web/styles.css` references those tokens. `web/index.html` loads `tokens.css` before `styles.css`.
+
 ## Stripe Verification Requirements
 
 Stripe reviewers should be able to clearly understand:
@@ -297,6 +299,7 @@ kustomization/base/image-automation.yaml
 kustomization/base/service.yaml
 kustomization/overlays/prod/kustomization.yaml
 web/index.html
+web/tokens.css
 web/styles.css
 web/business-details.js
 web/elements/pages/page-home.html
@@ -364,7 +367,7 @@ The local server defaults to:
 http://localhost:42069
 ```
 
-`PORT` can override the default port:
+`PORT` is read in `config/port.go` and can override the default port:
 
 ```sh
 PORT=3000 go run main.go
@@ -452,6 +455,7 @@ The base Kubernetes manifests define:
 - A Gateway API `HTTPRoute` named `anthonyposchen-com`
 - The container image `ghcr.io/anthonyposchen/anthonyposchen.com`
 - Container port `42069`
+- Container requests of `10m` CPU and `32Mi` memory, and limits of `200m` CPU and `128Mi` memory
 - A ClusterIP service exposing port `80` and targeting the deployment's named `http` port
 - Routing for `anthonyposchen.com` and `www.anthonyposchen.com` through the `Gateway` named `ingress` in the `kube-system` namespace
 - Flux image automation resources for `ghcr.io/anthonyposchen/anthonyposchen.com`
@@ -472,6 +476,19 @@ image: ghcr.io/anthonyposchen/anthonyposchen.com:master-5838cfa-1779289200 # {"$
 ```
 
 Flux updates files under `./kustomization/base` and commits the changed image reference back to `master`. The image automation commit message includes `[skip ci]`, and the Docker workflow also ignores `kustomization/**`, to prevent digest update commits from triggering another container build.
+
+## Lint
+
+Stylelint uses the shared colour and hygiene config from `lint/css/create-config.cjs`. `web/tokens.css` is the theme file and is the only place raw colours are allowed. Run:
+
+```sh
+npm ci
+npm run lint:css
+```
+
+`lint/no-clipped-heading` is off because display headings use `line-height: 1.02`. Raising that leading changes the layout.
+
+Go lint is `.golangci.yml` (golangci-lint v2) plus `lint/semgrep`. Kubernetes rules are `lint/k8s`, run on `kustomize build kustomization/overlays/prod`, with kubeconform for schema checks. GitHub Actions workflow `lint.yml` runs these on pull requests and pushes.
 
 ## Design Direction
 

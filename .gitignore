@@ -1,3 +1,4 @@
 docs/context.md
 build-errors.log
 tmp/
+node_modules/
